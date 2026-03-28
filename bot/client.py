@@ -1,5 +1,6 @@
 import os
 from binance.client import Client
+from bot.loggin_config import setup_logger
 from dotenv import load_dotenv
 
 
@@ -16,6 +17,8 @@ class BinanceClient:
         self.client = Client(api_key, api_secret, testnet=True)
         self.client.FUTURES_URL = "https://testnet.binancefuture.com"
 
+        self.logger = setup_logger()
+
     def place_futures_order(self, symbol, side, order_type, quantity, price=None):
         params = {
             "symbol": symbol,
@@ -30,11 +33,15 @@ class BinanceClient:
 
             params.update({"price": price, "timeInForce": "GTC"})
 
+        self.logger.info(f"Placing order: {params}")
+
         try:
             response = self.client.futures_create_order(**params)
+
+            self.logger.info(f"Order response: {response}")
+
             return response
 
         except Exception as e:
-            print("\n[ERROR] Binance API Error:")
-            print(str(e))
+            self.logger.error(f"Order failed: {str(e)}")
             raise
