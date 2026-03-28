@@ -38,6 +38,7 @@ def main():
         return
 
     service = OrderService()
+    result = None
     try:
         if args.type == "MARKET":
             result = service.place_market_order(
