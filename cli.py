@@ -1,5 +1,6 @@
 import argparse
 from bot.orders import OrderService
+from bot.validators import validate_order_input
 
 
 def parse_args():
@@ -23,6 +24,18 @@ def main():
 
     print("\n=== Order Request Summary ===")
     print(vars(args))
+
+    try:
+        validate_order_input(
+            symbol=args.symbol,
+            side=args.side,
+            order_type=args.type,
+            quantity=args.quantity,
+            price=args.price,
+        )
+    except ValueError as e:
+        print(f"\n❌ Validation Error: {str(e)}")
+        return
 
     service = OrderService()
     try:
@@ -48,6 +61,13 @@ def main():
 
         if result.get("orderId"):
             print("\n✅ Order placed successfully!")
+
+            if result.get("status") != "FILLED":
+                print(
+                    "ℹ️ Order is not filled yet (status: {})".format(
+                        result.get("status")
+                    )
+                )
         else:
             print("\n❌ Order failed!")
 

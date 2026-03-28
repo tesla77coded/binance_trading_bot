@@ -24,8 +24,6 @@ class OrderService:
         return self._format_response(response)
 
     def _format_response(self, response: dict):
-        print("\n[DEBUG] Raw API Response:")
-        print(response)
         return {
             "orderId": response.get("orderId"),
             "status": response.get("status"),
