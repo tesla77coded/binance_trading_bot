@@ -1,6 +1,6 @@
 import os
 from binance.client import Client
-from bot.loggin_config import setup_logger
+from bot.logging_config import setup_logger
 from dotenv import load_dotenv
 
 
